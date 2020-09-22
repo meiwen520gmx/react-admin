@@ -1,3 +1,8 @@
 //放置全局性公共的样式 @import 结尾不能缺少;，不然要报错
 @import "./sassConfig.scss";
 @import "./normalize.scss";
+
+//全局样式
+body{
+	background-color: #001529;
+}
