@@ -96,3 +96,23 @@ onClick={this.onFinish.bind(this)}
 ```
 4、绑定时使用箭头函数
 `onClick={() => {this.onFinish}}`
+### 跨域配置
+1.安装依赖：`yarn add http-proxy-middleware`
+2.修改路径
+  修改config/path.js
+  proxySetup路径
+3.新建文件夹
+  src/目录新建setupProxy.js
+  ```
+  const proxy = require("http-proxy-middleware");
+  module.export = function(app){
+    app.use(proxy("/manage",{
+      target: "http://admintest.happymmal.com",//配置你要请求的服务器地址
+      changeOrigin: true,
+    }))
+    app.use(proxy("/manage/api",{
+      target: "http://admintest.happymmall.com:7000",
+      changeOrigin: true
+    }))
+  }
+  ```
