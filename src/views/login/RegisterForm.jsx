@@ -34,7 +34,7 @@ class RegisterForm extends Component {
             onFinish={this.onFinish}
           >
             <Form.Item
-              name="telphone"
+              name="username"
               rules={[
                 {
                   required: true,
@@ -97,7 +97,7 @@ class RegisterForm extends Component {
               <Row gutter={10}>
                 <Col span={15}>
                   <Form.Item
-                    name="captcha"
+                    name="code"
                     noStyle
                     rules={[
                       {

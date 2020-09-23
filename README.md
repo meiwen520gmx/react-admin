@@ -104,15 +104,18 @@ onClick={this.onFinish.bind(this)}
 3.新建文件夹
   src/目录新建setupProxy.js
   ```
-  const proxy = require("http-proxy-middleware");
+  const { createProxyMiddleware } = require("http-proxy-middleware");
   module.export = function(app){
-    app.use(proxy("/manage",{
+    app.use(createProxyMiddleware("/manage",{
       target: "http://admintest.happymmal.com",//配置你要请求的服务器地址
       changeOrigin: true,
+      pathRewrite: {
+        "^/devApi": ""
+      }
     }))
-    app.use(proxy("/manage/api",{
+    <!-- app.use(proxy("/manage/api",{
       target: "http://admintest.happymmall.com:7000",
       changeOrigin: true
-    }))
+    })) -->
   }
   ```

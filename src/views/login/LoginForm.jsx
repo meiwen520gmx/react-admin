@@ -3,7 +3,9 @@ import React, { Component, Fragment } from "react";
 import { Form, Input, Button, Row, Col } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import {validate_tel} from "../../utils/validate";
+import { validate_tel } from "../../utils/validate";
+
+import { Login } from "../../api/account";
 
 class LoginForm extends Component {
   constructor(props) {
@@ -11,6 +13,11 @@ class LoginForm extends Component {
     this.state = {};
   }
   onFinish = (values) => {
+    Login(values).then(response => {
+      console.log(response)
+    }).catch(error => {
+
+    })
     console.log("Received values of form: ", values);
   };
   toggle = () => {
@@ -34,13 +41,14 @@ class LoginForm extends Component {
             onFinish={this.onFinish}
           >
             <Form.Item
-              name="telphone"
+              name="username"
               rules={[
                 {
                   required: true,
                   message: "请输入手机号!",
                 },
-                ({ getFieldValue }) => ({//getFieldValue是从context上下文中解构出来的
+                ({ getFieldValue }) => ({
+                  //getFieldValue是从context上下文中解构出来的
                   validator(rule, value) {
                     if (!value || validate_tel.test(value)) {
                       return Promise.resolve();
@@ -74,7 +82,7 @@ class LoginForm extends Component {
               <Row gutter={10}>
                 <Col span={15}>
                   <Form.Item
-                    name="captcha"
+                    name="code"
                     noStyle
                     rules={[
                       {
@@ -83,7 +91,7 @@ class LoginForm extends Component {
                       },
                     ]}
                   >
-                    <Input placeholder="验证码"/>
+                    <Input placeholder="验证码" />
                   </Form.Item>
                 </Col>
                 <Col span={9}>
