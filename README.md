@@ -119,3 +119,14 @@ onClick={this.onFinish.bind(this)}
     })) -->
   }
   ```
+### 配置环境变量
+在根目录新建文件：`.env.development`  `.env.production`  `.env.test`
+在文件里面配置对应的环境变量存地址：变量名要以`REACT_APP_`开头
+通过`process.env.NODE_ENV`来读取当前所处的环境
+通过`process.env.REACT_APP_API`来读取当前所处环境所对应的地址
+为了区分打包后的测试环境和生产环境，还需要借助dotenv来区分：
+安装`yarn add dotenv-cli`
+修改package.json文件中的scripts指定环境：
+`"build:dev": "dotenv -e .env.development react-app-rewired build",`
+`"build:pro": "dotenv -e .env.production react-app-rewired build",`
+`"build:test": "dotenv -e .env.test react-app-rewired build",`
