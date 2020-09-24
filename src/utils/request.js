@@ -7,8 +7,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
   function (config) {
-    console.log(process)
-    console.log(process.env.NODE_ENV)//development 读取环境变量
+    // console.log(process.env.NODE_ENV)//development 读取环境变量
     return config;
   },
   function (error) {

@@ -3,7 +3,7 @@ import React, { Component, Fragment } from "react";
 import { Form, Input, Button, Row, Col } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import {validate_tel} from "../../utils/validate";
+// import {validate_tel} from "../../utils/validate";
 
 class RegisterForm extends Component {
   constructor(props) {
@@ -38,21 +38,25 @@ class RegisterForm extends Component {
               rules={[
                 {
                   required: true,
-                  message: "请输入手机号!",
+                  message: "请输入邮箱!",
                 },
-                ({ getFieldValue }) => ({
-                  validator(rule, value) {
-                    if (!value || validate_tel.test(value)) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject("手机号填写错误！");
-                  },
-                }),
+                {
+                  type: 'email',
+                  message: "邮箱填写错误!",
+                },
+                // ({ getFieldValue }) => ({
+                //   validator(rule, value) {
+                //     if (!value || validate_tel.test(value)) {
+                //       return Promise.resolve();
+                //     }
+                //     return Promise.reject("手机号填写错误！");
+                //   },
+                // }),
               ]}
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="手机号"
+                placeholder="邮箱"
               />
             </Form.Item>
             <Form.Item
