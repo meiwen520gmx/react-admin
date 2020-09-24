@@ -1,27 +1,20 @@
 import React, { Component, Fragment } from "react";
 
-import { Form, Input, Button, Row, Col, message } from "antd";
+import { Form, Input, Button, Row, Col} from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import { validate_email } from "../../utils/validate";
 
-import { Login, GetCode } from "../../api/account";
+import { Login } from "../../api/account";
 
-//验证码状态
-const codeStatus = {
-  get: "获取验证码",
-  send: "发送中",
-  fail: "重新获取",
-};
+
+import Code from "../../components/code/index";
 
 class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
-      isDisable: true,
-      code_loadings: false,
-      code_text: codeStatus.get,
     };
   }
   //点击登录按钮
@@ -33,63 +26,18 @@ class LoginForm extends Component {
       .catch((error) => {});
     console.log("Received values of form: ", values);
   };
-
-  //获取验证码
-  getCode = () => {
-    // if(!this.state.username){
-    //   message.warning("用户名不能为空！")
-    // }
-    this.setState({ code_loadings: true, code_text: codeStatus.send });
-    const requestData = {
-      username: this.state.username,
-      module: "login",
-    };
-    GetCode(requestData)
-      .then((res) => {
-        //执行倒计时
-        this.countDown();
-      })
-      .catch((error) => {
-        this.setState({ code_loadings: false, code_text: codeStatus.fail });
-      });
-  };
-  //倒计时
-  countDown = () => {
-    let timerId = null;
-    let sec = 5;
-    this.setState({
-      code_loadings: false,
-      code_text: `${sec}s`,
-      isDisable: true,
-    });
-    timerId = setInterval(() => {
-      sec--;
-      if (sec === 0) {
-        clearInterval(timerId);
-        this.setState({
-          code_text: codeStatus.fail,
-          isDisable: false,
-        });
-        return false;
-      }
-      this.setState({
-        code_text: `${sec}s`,
-      });
-    }, 1000);
-  };
   //input输入处理
   changeName = (e) => {
     let value = e.target.value;
     this.setState({ username: value });
   };
-
   //切换登录注册
   toggle = () => {
     this.props.handleChange("register");
   };
 
   render() {
-    const { username, isDisable, code_loadings, code_text } = this.state;
+    const { username } = this.state;
     const _this = this;
     return (
       <Fragment>
@@ -116,13 +64,13 @@ class LoginForm extends Component {
                 ({ getFieldValue }) => ({
                   validator(rule, value) {
                     if (validate_email(value)) {
-                      _this.setState({ isDisable: false });
+                      _this.child.toggleStatus(false)
                       return Promise.resolve();
                     }
                     if (!value) {
                       return Promise.resolve();
                     }
-                    _this.setState({ isDisable: true });
+                    _this.child.toggleStatus(true)
                     return Promise.reject("邮箱填写错误！");
                   },
                 }),
@@ -143,7 +91,7 @@ class LoginForm extends Component {
             >
               <Input
                 value={username}
-                onChange={this.changeName}
+                onChange={this.changeName}   
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="邮箱"
               />
@@ -181,7 +129,7 @@ class LoginForm extends Component {
                 </Col>
                 <Col span={10}>
                   {/* 发送验证码有四种状态：获取验证码，发送中，60s，重新获取 */}
-                  <Button
+                  {/* <Button
                     type="primary"
                     danger
                     block
@@ -190,11 +138,11 @@ class LoginForm extends Component {
                     loading={code_loadings}
                   >
                     {code_text}
-                  </Button>
+                  </Button> */}
+                  <Code username={username} onRef={ref=>this.child=ref} />
                 </Col>
               </Row>
             </Form.Item>
-
             <Form.Item>
               <Button
                 type="primary"

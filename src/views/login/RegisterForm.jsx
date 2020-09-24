@@ -3,12 +3,16 @@ import React, { Component, Fragment } from "react";
 import { Form, Input, Button, Row, Col } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-// import {validate_tel} from "../../utils/validate";
+import Code from "../../components/code/index";
+
+import { validate_email } from "../../utils/validate";
 
 class RegisterForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      username: ""
+    };
   }
   onFinish = (values) => {
     console.log("Received values of form: ", values);
@@ -16,8 +20,14 @@ class RegisterForm extends Component {
   toggle = () => {
     this.props.handleChange("login");
   };
+  //input输入处理
+  changeName = (e) => {
+    let value = e.target.value;
+    this.setState({ username: value });
+  };
 
   render() {
+    const {username} = this.state;
     return (
       <Fragment>
         <div className="form-header">
@@ -41,7 +51,7 @@ class RegisterForm extends Component {
                   message: "请输入邮箱!",
                 },
                 {
-                  type: 'email',
+                  type: "email",
                   message: "邮箱填写错误!",
                 },
                 // ({ getFieldValue }) => ({
@@ -57,6 +67,8 @@ class RegisterForm extends Component {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="邮箱"
+                value={username}
+                onChange={this.changeName}   
               />
             </Form.Item>
             <Form.Item
@@ -114,9 +126,7 @@ class RegisterForm extends Component {
                   </Form.Item>
                 </Col>
                 <Col span={9}>
-                  <Button type="primary" danger block>
-                    获取验证码
-                  </Button>
+                   <Code username={username} onRef={ref=>this.child=ref} />
                 </Col>
               </Row>
             </Form.Item>
