@@ -134,3 +134,18 @@ onClick={this.onFinish.bind(this)}
 `"build:dev": "dotenv -e .env.development react-app-rewired build",`
 `"build:pro": "dotenv -e .env.production react-app-rewired build",`
 `"build:test": "dotenv -e .env.test react-app-rewired build",`
+
+### 密码加密
+安装：`yarn add crypto-js`
+使用：
+```
+import CryptoJs from 'crypto-js';
+// password = '123456';
+// md5加密
+const pwd = CryptoJs.MD5(password).toString();
+// SHA1
+let pwd = CryptoJS.SHA1(password).toString();
+// AES加密 第一个参数为需要加密的内容，第二个参数为秘钥 
+const secretKey = '_zefdsuh123';
+let pwd = CryptoJS.AES.encrypt(password, secretKey).toString();
+```

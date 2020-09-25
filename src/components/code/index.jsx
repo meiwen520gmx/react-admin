@@ -80,7 +80,7 @@ class Code extends Component {
   };
   //倒计时
   countDown = () => {
-    let sec = 5;
+    let sec = 60;
     this.setState({
       code_loadings: false,
       code_text: `${sec}s`,

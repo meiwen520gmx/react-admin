@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
+import CryptoJs from 'crypto-js';
 
-import { Form, Input, Button, Row, Col } from "antd";
+import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import Code from "../../components/code/index";
@@ -19,11 +20,12 @@ class LoginForm extends Component {
   }
   //点击登录按钮
   onFinish = (values) => {
-    // Login(values)
-    //   .then((response) => {
-    //     // console.log(response)
-    //   })
-    //   .catch((error) => {});
+    values.password = CryptoJs.MD5(values.password).toString();//加密
+    Login(values)
+      .then((res) => {
+        message.success(res.message);
+      })
+      .catch((error) => {});
     console.log("Received values of form: ", values);
   };
   //input输入处理

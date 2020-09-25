@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import CryptoJs from 'crypto-js';
 
 import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -18,8 +19,13 @@ class RegisterForm extends Component {
     };
   }
   onFinish = (values) => {
+    values.password = CryptoJs.MD5(values.password).toString();//加密
+    values.repassword = CryptoJs.MD5(values.repassword).toString();
     Register(values).then((res) => {
       message.success(res.message);
+      if(res.resCode === 0){
+        toggle();
+      }
     }).catch((error) => {});
   };
   toggle = () => {
