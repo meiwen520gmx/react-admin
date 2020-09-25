@@ -1,29 +1,29 @@
 import React, { Component, Fragment } from "react";
 
-import { Form, Input, Button, Row, Col} from "antd";
+import { Form, Input, Button, Row, Col } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+
+import Code from "../../components/code/index";
 
 import { validate_email } from "../../utils/validate";
 
 import { Login } from "../../api/account";
-
-
-import Code from "../../components/code/index";
 
 class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
+      module: "login",
     };
   }
   //点击登录按钮
   onFinish = (values) => {
-    Login(values)
-      .then((response) => {
-        // console.log(response)
-      })
-      .catch((error) => {});
+    // Login(values)
+    //   .then((response) => {
+    //     // console.log(response)
+    //   })
+    //   .catch((error) => {});
     console.log("Received values of form: ", values);
   };
   //input输入处理
@@ -37,8 +37,8 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { username } = this.state;
-    const _this = this;
+    const { username, module } = this.state;
+    // const _this = this;
     return (
       <Fragment>
         <div className="form-header">
@@ -61,17 +61,12 @@ class LoginForm extends Component {
                   required: true,
                   message: "请输入邮箱!",
                 },
-                ({ getFieldValue }) => ({
+                 ({ getFieldValue }) => ({
                   validator(rule, value) {
-                    if (validate_email(value)) {
-                      _this.child.toggleStatus(false)
+                    if (!value || validate_email(value)) {
                       return Promise.resolve();
                     }
-                    if (!value) {
-                      return Promise.resolve();
-                    }
-                    _this.child.toggleStatus(true)
-                    return Promise.reject("邮箱填写错误！");
+                    return Promise.reject("邮箱格式不正确！");
                   },
                 }),
                 // {
@@ -91,7 +86,7 @@ class LoginForm extends Component {
             >
               <Input
                 value={username}
-                onChange={this.changeName}   
+                onChange={this.changeName}
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="邮箱"
               />
@@ -122,6 +117,10 @@ class LoginForm extends Component {
                         required: true,
                         message: "请输入验证码!",
                       },
+                      {
+                        len: 6,
+                        message: "请输入长度为6位的验证码!",
+                      },
                     ]}
                   >
                     <Input placeholder="验证码" />
@@ -139,7 +138,11 @@ class LoginForm extends Component {
                   >
                     {code_text}
                   </Button> */}
-                  <Code username={username} onRef={ref=>this.child=ref} />
+                  <Code
+                    username={username}
+                    module={module}
+                    // onRef={(ref) => (this.child = ref)}
+                  />
                 </Col>
               </Row>
             </Form.Item>

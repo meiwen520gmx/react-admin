@@ -1,3 +1,7 @@
+### 学习文档
+* reactrouter:https://reactrouter.com/web/guides/quick-start
+* redux: https://www.redux.org.cn/docs/advanced/UsageWithReactRouter.html
+* react App中文文档：https://www.html.cn/create-react-app/docs/adding-custom-environment-variables/
 ### git 基础命令
 
 - 拷贝项目：`git clone <仓库地址>`

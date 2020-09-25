@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { message } from 'antd';
 
 import { GetCode } from "../../api/account";
+import { validate_email } from "../../utils/validate";
 
 import { Button } from "antd";
 
@@ -20,45 +22,57 @@ class Code extends Component {
     super(props);
     this.state = {
       username: props.username, //初始化默认值
-      isDisable: true,
+      isDisable: false,
       code_loadings: false,
       code_text: codeStatus.get,
+      module: props.module,
     };
   }
 
-  componentWillReceiveProps({username}) {
-    this.setState({ username });
+  //react16.3更新了生命周期函数，不建议使用componentWillReceiveProps、componentWillUpdate、componentWillMount
+  // componentWillReceiveProps({username}) {
+  //   this.setState({ username });
+  // }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { username } = nextProps;
+    // 当传入的username发生变化的时候，更新state
+    if (username !== prevState.username) {
+      return { username };
+    }
+    // 否则，对于state不进行任何操作
+    return null;
   }
 
-  componentWillUnmount(){
-    clearInterval(timerId);//组件销毁时消除定时器
+  componentWillUnmount() {
+    clearInterval(timerId); //组件销毁时消除定时器
   }
 
-  componentDidMount(){
-    this.props.onRef(this)
-  }
-
-  //切换按钮禁用与否
-  toggleStatus = (value) => {
-    this.setState({isDisable: value})
-  }
+  // componentDidMount() {
+  //   this.props.onRef(this);
+  // }
 
   //获取验证码
   //this.props.username 每次都会去获取
   getCode = () => {
-    // if(!this.props.username){
-    //   message.warning("用户名不能为空！")
-    // }
-    this.setState({ code_loadings: true, code_text: codeStatus.send });
+    let {username} = this.state;
+    if(!username){
+      message.warning("邮箱不能为空！");
+      return false;
+    }
+    if(!validate_email(username)){
+      message.warning("邮箱格式不正确！");
+      return false;
+    }
+    this.setState({ code_loadings: true, code_text: codeStatus.send  });
     const requestData = {
       // username: this.props.username,每次都会去获取一次值，这样消耗性能,使用componentWillReceiveProps来解决
       username: this.state.username,
-      module: "login",
+      module: this.state.module,
     };
     GetCode(requestData)
       .then((res) => {
-        //执行倒计时
-        this.countDown();
+        message.success(res.message)
+        this.countDown(); //执行倒计时
       })
       .catch((error) => {
         this.setState({ code_loadings: false, code_text: codeStatus.fail });
@@ -105,5 +119,6 @@ class Code extends Component {
 }
 Code.propTypes = {
   username: PropTypes.string.isRequired,
+  module: PropTypes.string.isRequired
 };
 export default Code;

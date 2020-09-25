@@ -1,21 +1,26 @@
 import React, { Component, Fragment } from "react";
 
-import { Form, Input, Button, Row, Col } from "antd";
+import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import Code from "../../components/code/index";
 
 import { validate_email } from "../../utils/validate";
 
+import { Register } from "../../api/account";
+
 class RegisterForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: ""
+      username: "",
+      module: "register"
     };
   }
   onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    Register(values).then((res) => {
+      message.success(res.message);
+    }).catch((error) => {});
   };
   toggle = () => {
     this.props.handleChange("login");
@@ -27,7 +32,7 @@ class RegisterForm extends Component {
   };
 
   render() {
-    const {username} = this.state;
+    const {username, module} = this.state;
     return (
       <Fragment>
         <div className="form-header">
@@ -50,26 +55,22 @@ class RegisterForm extends Component {
                   required: true,
                   message: "请输入邮箱!",
                 },
-                {
-                  type: "email",
-                  message: "邮箱填写错误!",
-                },
-                // ({ getFieldValue }) => ({
-                //   validator(rule, value) {
-                //     if (!value || validate_tel.test(value)) {
-                //       return Promise.resolve();
-                //     }
-                //     return Promise.reject("手机号填写错误！");
-                //   },
-                // }),
+                ({ getFieldValue }) => ({
+                  validator(rule, value) {
+                    if (!value || validate_email(value)) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject("邮箱格式不正确！");
+                  },
+                }),
               ]}
             >
-              <Input
+            <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="邮箱"
                 value={username}
                 onChange={this.changeName}   
-              />
+            />
             </Form.Item>
             <Form.Item
               name="password"
@@ -78,6 +79,15 @@ class RegisterForm extends Component {
                   required: true,
                   message: "请输入密码!",
                 },
+                ({ getFieldValue }) => ({
+                  validator(rule, value) {
+                    let repwd = getFieldValue("repassword");
+                    if (repwd && value !== repwd) {
+                      return Promise.reject("两次密码不一致!");
+                    }
+                    return Promise.resolve();
+                  },
+                }),
               ]}
             >
               <Input
@@ -98,7 +108,7 @@ class RegisterForm extends Component {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject("输入的密码不一致!");
+                    return Promise.reject("两次密码不一致!");
                   },
                 }),
               ]}
@@ -120,13 +130,17 @@ class RegisterForm extends Component {
                         required: true,
                         message: "请输入验证码!",
                       },
+                      {
+                        len:6,
+                        message: "请输入长度为6位的验证码!"
+                      },
                     ]}
                   >
                     <Input placeholder="验证码" />
                   </Form.Item>
                 </Col>
                 <Col span={9}>
-                   <Code username={username} onRef={ref=>this.child=ref} />
+                   <Code username={username} module={module} />
                 </Col>
               </Row>
             </Form.Item>
