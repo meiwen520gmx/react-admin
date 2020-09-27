@@ -23,8 +23,8 @@ class RegisterForm extends Component {
     values.repassword = CryptoJs.MD5(values.repassword).toString();
     Register(values).then((res) => {
       message.success(res.message);
-      if(res.resCode === 0){
-        toggle();
+      if(res.resCode === 0){//注册成功切换去登录页面
+        this.toggle();
       }
     }).catch((error) => {});
   };

@@ -16,17 +16,23 @@ class LoginForm extends Component {
     this.state = {
       username: "",
       module: "login",
+      loading: false
     };
   }
   //点击登录按钮
   onFinish = (values) => {
     values.password = CryptoJs.MD5(values.password).toString();//加密
-    Login(values)
+    this.setState({loading: true})
+    // setTimeout(() => {主要是为了查看加载的效果
+      Login(values)
       .then((res) => {
         message.success(res.message);
+        this.setState({loading: false})
       })
-      .catch((error) => {});
-    console.log("Received values of form: ", values);
+      .catch((error) => {
+        this.setState({loading: false})
+      });
+    // },1000)
   };
   //input输入处理
   changeName = (e) => {
@@ -39,7 +45,7 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { username, module } = this.state;
+    const { username, module, loading } = this.state;
     // const _this = this;
     return (
       <Fragment>
@@ -153,6 +159,7 @@ class LoginForm extends Component {
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
+                loading={loading}
                 block
               >
                 登录
