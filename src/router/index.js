@@ -1,8 +1,8 @@
 const router = [
   {
     title: "控制台",
-    icon: 'home',
-    key: '/home'
+    icon: 'index',
+    key: '/index'
   },
   {
     title: '用户管理',
@@ -16,30 +16,30 @@ const router = [
   {
     title: '部门管理',
     icon: 'bars',
-    key: '/home/navigation',
+    key: '/index/navigation',
     subs: [
-      {key: '/home/navigation/dropdown',title:'部门列表',icon:''},
-      {key: '/home/navigation/menu',title:'添加部门',icon:''}
+      {key: '/index/navigation/dropdown',title:'部门列表',icon:''},
+      {key: '/index/navigation/menu',title:'添加部门',icon:''}
     ]
   },
   {
     title: '职位管理',
     icon: 'job',
-    key: '/home/entry',
+    key: '/index/entry',
     subs: [
-      {key: '/home/entry/form/basic-form',title:'职位列表',icon:''},
-      {key: '/home/entry/form/step-form',title:'添加职位',icon:''}
+      {key: '/index/entry/form/basic-form',title:'职位列表',icon:''},
+      {key: '/index/entry/form/step-form',title:'添加职位',icon:''}
     ]
   },
   {
     title: "请假",
     icon: 'info-circle-o',
-    key: '/home/leave'
+    key: '/index/leave'
   },
   {
     title: "加班",
     icon: 'info-circle-o',
-    key: '/home/workOvertime'
+    key: '/index/workOvertime'
   },
 ]
 export default router;

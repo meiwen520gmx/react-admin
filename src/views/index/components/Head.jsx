@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 
-class Header extends React.Component {
+class Head extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
   render() {
-    return ();
+    return (<div>头部</div>);
   }
 }
 
-export default Header;
+export default Head;

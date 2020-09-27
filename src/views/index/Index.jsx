@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import "./layout.scss";
 
 import Aside from "./components/Aside";
+import Head from "./components/Head";
+import Container from "../../components/container/index";
 
 import { Layout } from "antd";
 const {Header, Sider, Content } = Layout;
@@ -22,8 +24,12 @@ class Index extends Component {
       <Layout className="layout-wrap">
         <Sider width="250px"><Aside /></Sider>
         <Layout>
-          <Header className="layout-header"></Header>
-          <Content className="layout-main">内容</Content>
+          <Header className="layout-header">
+             <Head />
+          </Header>
+          <Content className="layout-main">
+             <Container />
+          </Content>
         </Layout>
       </Layout>
     );
