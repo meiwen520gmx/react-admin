@@ -1,2 +1,31 @@
-//放置全局公共样式变量和方法
+/*放置全局公共样式变量和方法*/
 $color:blue;
+
+@mixin webkit($attr, $value){
+  -webkit-#{$attr}: $value;
+  -moz-#{$attr}: $value;
+  -ms-#{$attr}: $value;
+  -o-#{$attr}: $value;
+  #{$attr}: $value;
+}
+
+@mixin flexBox{
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@mixin flexAlign($value) {
+  -webkit-align-items: $value;
+     -moz-box-align: $value;
+      -ms-flex-align: $value;
+          align-items: $value;
+}
+
+@mixin flexJust($value){
+  -webkit-justify-content: $value;
+     -moz-box-pack: $value;
+      -ms-flex-pack: $value;
+          justify-content: $value;
+}

@@ -1,4 +1,5 @@
 //放置全局性公共的样式 @import 结尾不能缺少;，不然要报错
+//sass @import指令将文件包含在css中，不需要额外的HTTP请求
 @import "./sassConfig.scss";
 @import "./normalize.scss";
 

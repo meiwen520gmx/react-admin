@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from "react";
-import CryptoJs from 'crypto-js';
-
+import CryptoJs from "crypto-js";
+import { withRouter } from "react-router-dom";
 import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 import Code from "../../components/code/index";
 
 import { validate_email } from "../../utils/validate";
+import {setToken} from "../../utils/token";
 
 import { Login } from "../../api/account";
 
@@ -16,21 +17,23 @@ class LoginForm extends Component {
     this.state = {
       username: "",
       module: "login",
-      loading: false
+      loading: false,
     };
   }
   //点击登录按钮
   onFinish = (values) => {
-    values.password = CryptoJs.MD5(values.password).toString();//加密
-    this.setState({loading: true})
+    values.password = CryptoJs.MD5(values.password).toString(); //加密
+    this.setState({ loading: true });
     // setTimeout(() => {主要是为了查看加载的效果
-      Login(values)
+    Login(values)
       .then((res) => {
         message.success(res.message);
-        this.setState({loading: false})
+        this.setState({ loading: false });
+        setToken(res.data.token);//保存token
+        this.props.history.push("/index");
       })
       .catch((error) => {
-        this.setState({loading: false})
+        this.setState({ loading: false });
       });
     // },1000)
   };
@@ -69,7 +72,7 @@ class LoginForm extends Component {
                   required: true,
                   message: "请输入邮箱!",
                 },
-                 ({ getFieldValue }) => ({
+                ({ getFieldValue }) => ({
                   validator(rule, value) {
                     if (!value || validate_email(value)) {
                       return Promise.resolve();
@@ -172,4 +175,4 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);

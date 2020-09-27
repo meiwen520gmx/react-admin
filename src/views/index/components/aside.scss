@@ -1,0 +1,13 @@
+.logo{
+  height: 80px;
+  @include flexBox;
+  @include flexAlign(center);
+  @include flexJust(center);
+  color: #fff;
+  span{
+    display: block;
+    width: 177px;
+    height: 47px;
+    background-color: #334454;
+  }
+}
