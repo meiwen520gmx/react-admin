@@ -1,3 +1,12 @@
+### 功能
+1.登录、注册
+2.登录保存token于session中
+3.配置接口跨域，封装axios请求
+4.配置环境变量
+5.密码加密
+6.根据路由表生成侧边栏
+
+
 ### 学习文档
 * reactrouter:https://reactrouter.com/web/guides/quick-start
 * redux: https://www.redux.org.cn/docs/advanced/UsageWithReactRouter.html
