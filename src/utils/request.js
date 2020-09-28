@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import {getValue, AdminToken} from "./token";
+
 const service = axios.create({
   baseURL: process.env.REACT_APP_API,//读取环境变量中对应的请求地址
   timeout: 5000,

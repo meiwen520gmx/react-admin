@@ -9,14 +9,14 @@ const router = [
     icon: "laptop",
     key: "/index/user",
     subs: [
-      { key: "/index/user/list", title: "用户列表", icon: "" },
+      { key: "/index/user/index", title: "用户列表", icon: "" },
       {
-        key: "/index/user/addUser",
+        key: "/index/user/adduser",
         title: "添加用户",
         icon: "",
         subs: [
-          { key: "/index/user/addUser/person", title: "个人中心", icon: "" },
-          { key: "/index/user/addUser/work", title: "工作总结", icon: "" },
+          { key: "/index/user/adduser/person", title: "个人中心", icon: "" },
+          { key: "/index/user/adduser/work", title: "工作总结", icon: "" },
         ],
       },
     ],
@@ -24,10 +24,10 @@ const router = [
   {
     title: "部门管理",
     icon: "bars",
-    key: "/index/navigation",
+    key: "/index/department",
     subs: [
-      { key: "/index/navigation/dropdown", title: "部门列表", icon: "" },
-      { key: "/index/navigation/menu", title: "添加部门", icon: "" },
+      { key: "/index/department/index", title: "部门列表", icon: "" },
+      { key: "/index/department/addpart", title: "添加部门", icon: "" },
     ],
   },
   {
