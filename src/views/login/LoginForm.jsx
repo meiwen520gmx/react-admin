@@ -60,9 +60,6 @@ class LoginForm extends Component {
           <Form
             name="normal_login"
             className="login-form"
-            initialValues={{
-              remember: true,
-            }}
             onFinish={this.onFinish}
           >
             <Form.Item

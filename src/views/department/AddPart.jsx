@@ -17,7 +17,7 @@ class AddPart extends Component {
   onSubmit = (values) => {
     AddDepartment(values)
       .then((res) => {
-        console.log(res)
+        console.log(res);
       })
       .catch((error) => {
         console.log(error);
@@ -28,7 +28,13 @@ class AddPart extends Component {
   render() {
     const { formLayout } = this.state;
     return (
-      <Form onFinish={this.onSubmit} {...formLayout}>
+      <Form
+        onFinish={this.onSubmit}
+        {...formLayout}
+        initialValues={{
+          number: 0,
+        }}
+      >
         <Form.Item
           label="部门名称"
           name="name"
@@ -51,7 +57,7 @@ class AddPart extends Component {
             },
           ]}
         >
-          <InputNumber defaultValue={0} min={0} max={100} />
+          <InputNumber min={0} max={100} />
         </Form.Item>
         <Form.Item
           label="禁启用"
