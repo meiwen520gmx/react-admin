@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 
-class Head extends Component {
+class AddUser extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
   render() {
-    return (<div>头部</div>);
+    return (<div>添加用户</div>);
   }
 }
 
-export default Head;
+export default AddUser;

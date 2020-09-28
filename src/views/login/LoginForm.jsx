@@ -4,10 +4,10 @@ import { withRouter } from "react-router-dom";
 import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import Code from "../../components/code/index";
+import Code from "../../components/code/Index";
 
 import { validate_email } from "../../utils/validate";
-import {setToken} from "../../utils/token";
+import {setValue, AdminToken} from "../../utils/token";
 
 import { Login } from "../../api/account";
 
@@ -29,7 +29,7 @@ class LoginForm extends Component {
       .then((res) => {
         message.success(res.message);
         this.setState({ loading: false });
-        setToken(res.data.token);//保存token
+        setValue(AdminToken,res.data.token);//保存token
         this.props.history.push("/index");
       })
       .catch((error) => {
