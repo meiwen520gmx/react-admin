@@ -19,27 +19,21 @@ class AddPart extends Component {
     this.setState({ loading: true });
     AddDepartment(values)
       .then((res) => {
-        
-        if (res.resCode === 0) {
-          message.success(res.message);
-        } else {
-          message.warning(res.message);
-        }
+        message.success(res.message);
         this.setState({ loading: false });
-        this.form.resetFields();//重置表单
+        this.form.resetFields(); //重置表单
       })
       .catch((error) => {
-        message.error(error);
+        // message.error(error);l
         this.setState({ loading: true });
       });
-    console.log(values);
   };
 
   render() {
     const { formLayout, loading } = this.state;
     return (
       <Form
-        ref={form => this.form = form}
+        ref={(form) => (this.form = form)}
         onFinish={this.onSubmit}
         {...formLayout}
         initialValues={{

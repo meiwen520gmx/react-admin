@@ -2,6 +2,8 @@ import axios from "axios";
 
 import { getToken, getUserName } from "./cookies";
 
+import { message } from "antd";
+
 const service = axios.create({
   baseURL: process.env.REACT_APP_API, //读取环境变量中对应的请求地址
   timeout: 5000,
@@ -21,7 +23,12 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   function (response) {
-    return response.data;
+    const data = response.data;
+    if(data.resCode !== 0){//resCode不成功 做全局的处理
+      message.warning(data.message);
+    }else{//resCode成功
+      return data;
+    }
   },
   function (error) {
     return Promise.reject(error);
