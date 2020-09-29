@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Form, Input, Button, Radio, InputNumber } from "antd";
+import { Form, Input, Button, Radio, InputNumber, message } from "antd";
 
 import { AddDepartment } from "../../api/department";
 
@@ -12,27 +12,39 @@ class AddPart extends Component {
         labelCol: { span: 2 },
         wrapperCol: { span: 22 },
       },
+      loading: false,
     };
   }
   onSubmit = (values) => {
+    this.setState({ loading: true });
     AddDepartment(values)
       .then((res) => {
-        console.log(res);
+        
+        if (res.resCode === 0) {
+          message.success(res.message);
+        } else {
+          message.warning(res.message);
+        }
+        this.setState({ loading: false });
+        this.form.resetFields();//重置表单
       })
       .catch((error) => {
-        console.log(error);
+        message.error(error);
+        this.setState({ loading: true });
       });
     console.log(values);
   };
 
   render() {
-    const { formLayout } = this.state;
+    const { formLayout, loading } = this.state;
     return (
       <Form
+        ref={form => this.form = form}
         onFinish={this.onSubmit}
         {...formLayout}
         initialValues={{
           number: 0,
+          status: false,
         }}
       >
         <Form.Item
@@ -57,18 +69,9 @@ class AddPart extends Component {
             },
           ]}
         >
-          <InputNumber min={0} max={100} />
+          <InputNumber min={1} max={100} />
         </Form.Item>
-        <Form.Item
-          label="禁启用"
-          name="status"
-          rules={[
-            {
-              required: true,
-              message: "禁启用不能为空！",
-            },
-          ]}
-        >
+        <Form.Item label="禁启用" name="status">
           <Radio.Group>
             <Radio value={false}>禁用</Radio>
             <Radio value={true}>启用</Radio>
@@ -87,7 +90,7 @@ class AddPart extends Component {
           <Input.TextArea />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button loading={loading} type="primary" htmlType="submit">
             确定
           </Button>
         </Form.Item>

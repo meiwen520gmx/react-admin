@@ -7,7 +7,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Code from "../../components/code/Index";
 
 import { validate_email } from "../../utils/validate";
-import {setValue, AdminToken} from "../../utils/token";
+import {setToken, setUserName} from "../../utils/cookies";
 
 import { Login } from "../../api/account";
 
@@ -29,7 +29,8 @@ class LoginForm extends Component {
       .then((res) => {
         message.success(res.message);
         this.setState({ loading: false });
-        setValue(AdminToken,res.data.token);//保存token
+        setToken(res.data.token);//保存token
+        setUserName(res.data.username);//保存username
         this.props.history.push("/index");
       })
       .catch((error) => {
