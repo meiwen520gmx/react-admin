@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Form, Input, Button, Radio, InputNumber, message } from "antd";
 
-import { AddDepartment } from "@/api/department";
+import { AddDepartment, CheckDetail, EditDepartment } from "@/api/department";
 
 class AddPart extends Component {
   constructor(props) {
@@ -13,12 +13,43 @@ class AddPart extends Component {
         wrapperCol: { span: 22 },
       },
       loading: false,
+      id: "",
+      btnText: "",
     };
   }
+  UNSAFE_componentWillMount() {
+    if (this.props.location.state) {
+      this.setState({ id: this.props.location.state.id, btnText: "修改" }); //保存传过来的id
+    } else {
+      this.setState({ btnText: "添加" });
+    }
+  }
+  componentDidMount() {
+    //如果有传参过来，就去请求数据
+    if (this.state.id) {
+      this.getDetail();
+    }
+  }
+  //获取传过来的id，去请求数据进行填充
+  getDetail = () => {
+    CheckDetail({ id: this.state.id }).then((res) => {
+      this.form.setFieldsValue(res.data); //设置表单数据
+    });
+  };
+  //点击提交按钮
   onSubmit = (values) => {
     this.setState({ loading: true });
+    if (this.state.id) {
+      this.onEdit(values);
+    } else {
+      this.onAdd(values);
+    }
+  };
+  //添加信息
+  onAdd = (values) => {
     AddDepartment(values)
-      .then((res) => {//.then方法里面的第二个回调不存在的时候，会调用catch方法，如果存在第二个回调，则不会执行catch
+      .then((res) => {
+        //.then方法里面的第二个回调不存在的时候，会调用catch方法，如果存在第二个回调，则不会执行catch
         message.success(res.message);
         this.setState({ loading: false });
         this.form.resetFields(); //重置表单
@@ -27,9 +58,18 @@ class AddPart extends Component {
         this.setState({ loading: true });
       });
   };
-
+  //编辑信息
+  onEdit = (values) => {
+    values.id = this.state.id;
+    EditDepartment(values).then(res => {
+      message.success(res.message);
+      this.setState({ loading: false });
+    }).catch((error) => {
+      this.setState({ loading: true });
+    });
+  };
   render() {
-    const { formLayout, loading } = this.state;
+    const { formLayout, loading, btnText } = this.state;
     return (
       <Form
         ref={(form) => (this.form = form)}
@@ -84,7 +124,7 @@ class AddPart extends Component {
         </Form.Item>
         <Form.Item>
           <Button loading={loading} type="primary" htmlType="submit">
-            确定
+            {btnText}
           </Button>
         </Form.Item>
       </Form>

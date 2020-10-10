@@ -23,7 +23,7 @@ export function GetDepartmentList(data){
 
 
 /**
- * 部门列表
+ * 删除
  */
 export function DelDepartment(data){
   return service.request({
@@ -34,3 +34,36 @@ export function DelDepartment(data){
 }
 
 
+/**
+ * 切换禁用启用
+ */
+export function SwitchStatus(data){
+  return service.request({
+      url: "/department/status/",
+      method: "post",
+      data,//请求类型为post时的参数形式
+  })
+}
+
+/**
+ * 详情
+ */
+export function CheckDetail(data){
+  return service.request({
+      url: "/department/detailed/",
+      method: "post",
+      data,
+  })
+}
+
+
+/**
+ * 编辑部门
+ */
+export function EditDepartment(data){
+  return service.request({
+      url: "/department/edit/",
+      method: "post",
+      data,
+  })
+}
