@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Form, Input, Button, Radio, InputNumber, message } from "antd";
 
-import { AddDepartment } from "../../api/department";
+import { AddDepartment } from "@/api/department";
 
 class AddPart extends Component {
   constructor(props) {
@@ -18,13 +18,12 @@ class AddPart extends Component {
   onSubmit = (values) => {
     this.setState({ loading: true });
     AddDepartment(values)
-      .then((res) => {
+      .then((res) => {//.then方法里面的第二个回调不存在的时候，会调用catch方法，如果存在第二个回调，则不会执行catch
         message.success(res.message);
         this.setState({ loading: false });
         this.form.resetFields(); //重置表单
       })
       .catch((error) => {
-        // message.error(error);l
         this.setState({ loading: true });
       });
   };
@@ -37,7 +36,7 @@ class AddPart extends Component {
         onFinish={this.onSubmit}
         {...formLayout}
         initialValues={{
-          number: 0,
+          number: 1,
           status: false,
         }}
       >

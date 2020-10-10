@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { getToken, getUserName } from "./cookies";
+import { getToken, getUserName } from "./cookies";//用户信息存储在cookie中
 
 import { message } from "antd";
 
@@ -26,11 +26,13 @@ service.interceptors.response.use(
     const data = response.data;
     if(data.resCode !== 0){//resCode不成功 做全局的处理
       message.warning(data.message);
+      return Promise.reject(data);
     }else{//resCode成功
       return data;
     }
   },
   function (error) {
+    console.log(error.data);
     return Promise.reject(error);
   }
 );

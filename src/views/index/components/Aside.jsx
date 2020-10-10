@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import "./aside.scss";
 
-import AsideMenu from "../../../components/asideMenu/Index";
+import AsideMenu from "@/components/asideMenu/Index";
 
 class Aside extends Component {
   constructor(props) {

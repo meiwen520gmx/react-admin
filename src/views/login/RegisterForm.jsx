@@ -4,11 +4,11 @@ import CryptoJs from 'crypto-js';
 import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import Code from "../../components/code/Index";
+import Code from "@/components/code/Index";
 
-import { validate_email } from "../../utils/validate";
+import { validate_email } from "@/utils/validate";
 
-import { Register } from "../../api/account";
+import { Register } from "@/api/account";
 
 class RegisterForm extends Component {
   constructor(props) {

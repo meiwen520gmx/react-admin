@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 
-import {setValue, openKey, getValue} from "../../utils/token";
+import {setValue, openKey, getValue} from "@/utils/saveVal";
 
-import Router from "../../router/index";
+import Router from "@/router/index";
 import { UserOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 const { SubMenu } = Menu;

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { message } from 'antd';
 
-import { GetCode } from "../../api/account";
-import { validate_email } from "../../utils/validate";
+import { GetCode } from "@/api/account";
+import { validate_email } from "@/utils/validate";
 
 import { Button } from "antd";
 

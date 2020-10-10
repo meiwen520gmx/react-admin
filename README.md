@@ -158,3 +158,9 @@ let pwd = CryptoJS.SHA1(password).toString();
 const secretKey = '_zefdsuh123';
 let pwd = CryptoJS.AES.encrypt(password, secretKey).toString();
 ```
+### 配置alias
+在webpack.config.js中加上：
+```
+alias: {
+        '@': path.resolve('src'),
+```

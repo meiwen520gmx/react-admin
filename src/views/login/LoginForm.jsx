@@ -4,12 +4,12 @@ import { withRouter } from "react-router-dom";
 import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import Code from "../../components/code/Index";
+import Code from "@/components/code/Index";
 
-import { validate_email } from "../../utils/validate";
-import {setToken, setUserName} from "../../utils/cookies";
+import { validate_email } from "@/utils/validate";
+import {setToken, setUserName} from "@/utils/cookies";
 
-import { Login } from "../../api/account";
+import { Login } from "@/api/account";
 
 class LoginForm extends Component {
   constructor(props) {

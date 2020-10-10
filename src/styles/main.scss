@@ -7,3 +7,17 @@
 body{
 	background-color: #001529;
 }
+.inline-button{
+  button + button {//找到同级的下一个Button,设置它的左外边距
+    margin-left: 10px;
+  }
+}
+
+.table-wrap{
+  padding-top: 30px;
+}
+
+//覆盖antd样式
+.ant-layout-content{
+  min-height: auto;
+}
