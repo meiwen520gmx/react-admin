@@ -9,6 +9,8 @@ class PartList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      //表格加载
+      loadingTable: false,
       switchId: "",
       //table参数
       data: [],
@@ -71,6 +73,7 @@ class PartList extends Component {
 
   //获取列表
   getList = () => {
+    this.setState({loadingTable: true})
     const { pageSize, current, keyWord } = this.state;
     const requestData = {
       pageSize,
@@ -82,7 +85,7 @@ class PartList extends Component {
     GetDepartmentList(requestData).then((res) => {
       const resData = res.data;
       if (resData.data) {
-        this.setState({ data: resData.data, total: resData.total });
+        this.setState({ data: resData.data, total: resData.total, loadingTable: false });
       }
     });
   };
@@ -91,7 +94,12 @@ class PartList extends Component {
     if (!record.status) {
       return false;
     }
-    this.setState({switchId: record.id})
+    /**
+     * 第二种方法是自己定义一个开关flag:false，走到这里判断如果为true就return false,不让请求
+     * 请求数据的时候就修改为flag:true,此时如果用户连续点击这里会阻止，
+     * 最后请求成功后修改为flag:false,获取请求出错修改为flag:false
+     */
+    this.setState({switchId: record.id});
     const requestData = {
       id: record.id,
       status: record.status === '1' ? false : true
@@ -99,25 +107,22 @@ class PartList extends Component {
     SwitchStatus(requestData).then(res => {
       message.success(res.message);
       this.setState({switchId: ""})
+    }).catch(error => {
+      this.setState({switchId: ""})
     })
   }
 
   //勾选进行删除
   onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys });
-  };
-
-  //点击批量删除按钮
-  clickDelBtn = () => {
-    const { selectedRowKeys } = this.state;
-    const ids = selectedRowKeys.join(",");
-    // this.handleDel(ids);
+    this.setState({ selectedRowKeys});
   };
 
   //请求删除
   handleDel(id) {
     if (!id) {
-      return false;
+      const {selectedRowKeys} = this.state;
+      if(selectedRowKeys.length === 0){return false}
+      id = selectedRowKeys.join();
     }
     this.setState({
       visible: true,
@@ -128,9 +133,9 @@ class PartList extends Component {
   //点击警告弹窗确定按钮进行删除
   okModal = () => {
     const { id } = this.state;
-    this.hideModal(); //隐藏警告弹窗
     DelDepartment({ id }).then((res) => {
       message.success(res.message);
+      this.hideModal(); //隐藏警告弹窗
       this.getList(); //重新加载一遍数据
     });
   };
@@ -149,6 +154,7 @@ class PartList extends Component {
 
   //搜索
   onSearch = (value) => {
+    if(this.state.loadingTable){return false}
     this.setState({
       keyWord: value.name,
       pageSize: 10,
@@ -160,6 +166,8 @@ class PartList extends Component {
   hideModal = () => {
     this.setState({
       visible: false,
+      id: "",
+      selectedRowKeys: []
     });
   };
 
@@ -173,6 +181,7 @@ class PartList extends Component {
       current,
       total,
       visible,
+      loadingTable
     } = this.state;
     const rowSelection = {
       selectedRowKeys,
@@ -215,10 +224,11 @@ class PartList extends Component {
             pagination={pagination}
             onChange={this.handleTableChange}
             bordered
+            loading={loadingTable}
           />
           <Button
             type="primary"
-            onClick={this.clickDelBtn}
+            onClick={() => this.handleDel()}
             disabled={!hasSelected}
             loading={loading}
           >
