@@ -1,94 +1,87 @@
 import React, { Component, Fragment } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { Form, Input, Button, Table, Switch, message, Modal } from "antd";
+import { Form, Input, Button, Switch, message, Modal } from "antd";
+import TableComponent from "@/components/TableData/Index";
 
-import { GetDepartmentList, DelDepartment, SwitchStatus } from "@/api/department";
+import requestUrl from "@/api/requestUrl";
+
+import { DelDepartment, SwitchStatus } from "@/api/department";
 
 class PartList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      //表格加载
-      loadingTable: false,
       switchId: "",
-      //table参数
-      data: [],
-      //复选框选中数据
-      selectedRowKeys: [],
       //要删除的id
       id: "",
-      //分页参数
-      pageSize: 10,
-      current: 1, //当前页码
-      total: 1,
       keyWord: "",
+      //批量删除按钮加载动画
       loading: false,
       //警告弹窗
       visible: false,
-      columns: [
-        {
-          title: "部门名称",
-          key: "name",
-          dataIndex: "name",
-        },
-        {
-          title: "禁启用",
-          key: "status",
-          dataIndex: "status",
-          render: (text, record) => {
-            return (
-              <Switch
-                loading = {record.id === this.state.switchId}
-                checkedChildren="启用"
-                unCheckedChildren="禁用"
-                defaultChecked={text === "1" ? true : false}
-                onChange={() => this.onHandlerSwitch(record)}
-              />
-            );
+      //复选框选中数据
+      rowSelection: {
+        selectedRowKeys: [],
+        onChange: this.onSelectChange,
+      },
+      tableConfig: {
+        url: requestUrl.departmentList,
+        method: "post",
+        rowKey: "id",
+        isShowSelection: true,
+        columns: [
+          {
+            title: "部门名称",
+            key: "name",
+            dataIndex: "name",
           },
-        },
-        {
-          title: "人员数量",
-          key: "number",
-          dataIndex: "number",
-        },
-        {
-          title: "操作",
-          key: "action",
-          width: 215,
-          render: (text, record) => (
-            <div className="inline-button">
-              <Button type="primary"><Link to={{pathname:'/index/department/addpart',state:{id:record.id}}}>编辑</Link></Button>
-              <Button onClick={() => this.handleDel(record.id)}>删除</Button>
-            </div>
-          ),
-        },
-      ],
+          {
+            title: "禁启用",
+            key: "status",
+            dataIndex: "status",
+            render: (text, record) => {
+              return (
+                <Switch
+                  loading={record.id === this.state.switchId}
+                  checkedChildren="启用"
+                  unCheckedChildren="禁用"
+                  defaultChecked={text === "1" ? true : false}
+                  onChange={() => this.onHandlerSwitch(record)}
+                />
+              );
+            },
+          },
+          {
+            title: "人员数量",
+            key: "number",
+            dataIndex: "number",
+          },
+          {
+            title: "操作",
+            key: "action",
+            width: 215,
+            render: (text, record) => (
+              <div className="inline-button">
+                <Button type="primary">
+                  <Link
+                    to={{
+                      pathname: "/index/department/addpart",
+                      state: { id: record.id },
+                    }}
+                  >
+                    编辑
+                  </Link>
+                </Button>
+                <Button onClick={() => this.handleDel(record.id)}>删除</Button>
+              </div>
+            ),
+          },
+        ],
+      },
     };
-  }
-  componentDidMount() {
-    this.getList();
   }
 
-  //获取列表
-  getList = () => {
-    this.setState({loadingTable: true})
-    const { pageSize, current, keyWord } = this.state;
-    const requestData = {
-      pageSize,
-      pageNumber: current,
-    };
-    if (keyWord) {
-      requestData.name = keyWord;
-    }
-    GetDepartmentList(requestData).then((res) => {
-      const resData = res.data;
-      if (resData.data) {
-        this.setState({ data: resData.data, total: resData.total, loadingTable: false });
-      }
-    });
-  };
   //切换禁用启用
   onHandlerSwitch(record) {
     if (!record.status) {
@@ -99,29 +92,35 @@ class PartList extends Component {
      * 请求数据的时候就修改为flag:true,此时如果用户连续点击这里会阻止，
      * 最后请求成功后修改为flag:false,获取请求出错修改为flag:false
      */
-    this.setState({switchId: record.id});
+    this.setState({ switchId: record.id });
     const requestData = {
       id: record.id,
-      status: record.status === '1' ? false : true
-    }
-    SwitchStatus(requestData).then(res => {
-      message.success(res.message);
-      this.setState({switchId: ""})
-    }).catch(error => {
-      this.setState({switchId: ""})
-    })
+      status: record.status === "1" ? false : true,
+    };
+    SwitchStatus(requestData)
+      .then((res) => {
+        message.success(res.message);
+        this.setState({ switchId: "" });
+      })
+      .catch((error) => {
+        this.setState({ switchId: "" });
+      });
   }
 
   //勾选进行删除
   onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys});
+    this.setState({
+      rowSelection: { ...this.state.rowSelection, selectedRowKeys },
+    });
   };
 
   //请求删除
   handleDel(id) {
     if (!id) {
-      const {selectedRowKeys} = this.state;
-      if(selectedRowKeys.length === 0){return false}
+      const { selectedRowKeys } = this.state.rowSelection;
+      if (selectedRowKeys.length === 0) {
+        return false;
+      }
       id = selectedRowKeys.join();
     }
     this.setState({
@@ -136,25 +135,15 @@ class PartList extends Component {
     DelDepartment({ id }).then((res) => {
       message.success(res.message);
       this.hideModal(); //隐藏警告弹窗
-      this.getList(); //重新加载一遍数据
+      this.childRef.getList(); //重新加载一遍数据
     });
-  };
-  
-  
-  //改变页码
-  handleTableChange = (pagination, filters, sorter) => {
-    const { current } = pagination;
-    this.setState(
-      {
-        current,
-      },
-      this.getList()
-    );
   };
 
   //搜索
   onSearch = (value) => {
-    if(this.state.loadingTable){return false}
+    if (this.state.loadingTable) {
+      return false;
+    }
     this.setState({
       keyWord: value.name,
       pageSize: 10,
@@ -167,31 +156,13 @@ class PartList extends Component {
     this.setState({
       visible: false,
       id: "",
-      selectedRowKeys: []
+      rowSelection: { ...this.state.rowSelection, selectedRowKeys: [] },
     });
   };
 
   render() {
-    const {
-      columns,
-      data,
-      selectedRowKeys,
-      loading,
-      pageSize,
-      current,
-      total,
-      visible,
-      loadingTable
-    } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
-    const pagination = {
-      pageSize,
-      current,
-      total,
-    };
+    const { visible, tableConfig, rowSelection, loading } = this.state;
+    const { selectedRowKeys } = this.state.rowSelection;
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <Fragment>
@@ -216,15 +187,10 @@ class PartList extends Component {
           </Form.Item>
         </Form>
         <div className="table-wrap">
-          <Table
-            rowKey="id"
+          <TableComponent
+            config={tableConfig}
             rowSelection={rowSelection}
-            columns={columns}
-            dataSource={data}
-            pagination={pagination}
-            onChange={this.handleTableChange}
-            bordered
-            loading={loadingTable}
+            ref={(c) => (this.childRef = c)}
           />
           <Button
             type="primary"
