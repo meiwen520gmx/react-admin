@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
 
-import { Table } from "antd";
+import { Table, Button, Form, Input } from "antd";
 
 import { GetTableList } from "@/api/common";
+
+import PropTypes from "prop-types";
 
 class TableComponent extends Component {
   constructor(props) {
@@ -13,14 +15,13 @@ class TableComponent extends Component {
       current: 1, //当前页码
       total: 1,
       loadingTable: false, //数据加载动画
-      
+      keyWord: "",//搜索关键字
     };
   }
   componentDidMount() {
     console.log(this.props);
     this.getList();
   }
-  
 
   //改变页码
   handleTableChange = (pagination, filters, sorter) => {
@@ -48,6 +49,7 @@ class TableComponent extends Component {
         pageNumber: current,
       },
     };
+    if(this.state.keyWord){requestData.data.name = this.state.keyWord}
     GetTableList(requestData).then((res) => {
       const resData = res.data;
       if (resData.data) {
@@ -59,16 +61,28 @@ class TableComponent extends Component {
       }
     });
   };
+  //点击批量删除按钮调用父组件方法
+  Del = () => {
+    this.props.handleDel();
+  };
+
+   //搜索
+  onSearch = (value) => {
+    if (this.state.loadingTable) {
+      return false;
+    }
+    this.setState({
+      keyWord: value.name,
+      pageSize: 5,
+      current: 1,
+    });
+    this.getList();
+  };
   render() {
-    const {
-      pageSize,
-      current,
-      total,
-      data,
-      loadingTable,
-    } = this.state;
-    const { columns, rowKey } = this.props.config;
-    const {rowSelection} = this.props;
+    const { pageSize, current, total, data, loadingTable } = this.state;
+    const { columns, rowKey, isShowPatchBtn } = this.props.config;
+    const { rowSelection } = this.props;
+    const hasSelected = rowSelection.selectedRowKeys.length > 0;
     const pagination = {
       pageSize,
       current,
@@ -76,19 +90,42 @@ class TableComponent extends Component {
     };
     return (
       <Fragment>
-        <Table
-          rowKey={rowKey || "id"}
-          rowSelection={rowSelection ? rowSelection : null}
-          columns={columns}
-          dataSource={data}
-          loading={loadingTable}
-          pagination={pagination}
-          onChange={this.handleTableChange}
-          bordered
-        />
+        <Form layout="inline" onFinish={this.onSearch}>
+          <Form.Item name="name" label="部门名称">
+            <Input placeholder="请输入部门名称" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              搜索
+            </Button>
+          </Form.Item>
+        </Form>
+        <div className="table-wrap">
+          <Table
+            rowKey={rowKey || "id"}
+            rowSelection={rowSelection ? rowSelection : null}
+            columns={columns}
+            dataSource={data}
+            loading={loadingTable}
+            pagination={pagination}
+            onChange={this.handleTableChange}
+            bordered
+          />
+          {!!rowSelection && isShowPatchBtn ? (
+            <Button type="primary" onClick={this.Del} disabled={!hasSelected}>
+              批量删除
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
       </Fragment>
     );
   }
 }
-
+TableComponent.propTypes = {
+  config: PropTypes.object,
+  rowSelection: PropTypes.object,
+  handleDel: PropTypes.func,
+};
 export default TableComponent;

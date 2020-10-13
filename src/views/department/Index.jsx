@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 
-import { Form, Input, Button, Switch, message, Modal } from "antd";
+import { Button, Switch, message, Modal } from "antd";
 import TableComponent from "@/components/TableData/Index";
 
 import requestUrl from "@/api/requestUrl";
-
 import { DelDepartment, SwitchStatus } from "@/api/department";
 
 class PartList extends Component {
@@ -15,9 +14,7 @@ class PartList extends Component {
       switchId: "",
       //要删除的id
       id: "",
-      keyWord: "",
-      //批量删除按钮加载动画
-      loading: false,
+      
       //警告弹窗
       visible: false,
       //复选框选中数据
@@ -28,8 +25,8 @@ class PartList extends Component {
       tableConfig: {
         url: requestUrl.departmentList,
         method: "post",
-        rowKey: "id",
-        isShowSelection: true,
+        rowKey: "id", //table的key
+        isShowPatchBtn: true, //显示批量删除按钮
         columns: [
           {
             title: "部门名称",
@@ -115,7 +112,7 @@ class PartList extends Component {
   };
 
   //请求删除
-  handleDel(id) {
+  handleDel = (id) => {
     if (!id) {
       const { selectedRowKeys } = this.state.rowSelection;
       if (selectedRowKeys.length === 0) {
@@ -127,7 +124,7 @@ class PartList extends Component {
       visible: true,
       id,
     });
-  }
+  };
 
   //点击警告弹窗确定按钮进行删除
   okModal = () => {
@@ -139,18 +136,7 @@ class PartList extends Component {
     });
   };
 
-  //搜索
-  onSearch = (value) => {
-    if (this.state.loadingTable) {
-      return false;
-    }
-    this.setState({
-      keyWord: value.name,
-      pageSize: 10,
-      current: 1,
-    });
-    this.getList();
-  };
+ 
 
   hideModal = () => {
     this.setState({
@@ -161,9 +147,7 @@ class PartList extends Component {
   };
 
   render() {
-    const { visible, tableConfig, rowSelection, loading } = this.state;
-    const { selectedRowKeys } = this.state.rowSelection;
-    const hasSelected = selectedRowKeys.length > 0;
+    const { visible, tableConfig, rowSelection } = this.state;
     return (
       <Fragment>
         <Modal
@@ -176,31 +160,12 @@ class PartList extends Component {
         >
           <p>您确认要删除此信息吗？删除后将无法恢复</p>
         </Modal>
-        <Form layout="inline" onFinish={this.onSearch}>
-          <Form.Item name="name" label="部门名称">
-            <Input placeholder="请输入部门名称" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              搜索
-            </Button>
-          </Form.Item>
-        </Form>
-        <div className="table-wrap">
-          <TableComponent
-            config={tableConfig}
-            rowSelection={rowSelection}
-            ref={(c) => (this.childRef = c)}
-          />
-          <Button
-            type="primary"
-            onClick={() => this.handleDel()}
-            disabled={!hasSelected}
-            loading={loading}
-          >
-            批量删除
-          </Button>
-        </div>
+        <TableComponent
+          config={tableConfig}
+          rowSelection={rowSelection}
+          handleDel={this.handleDel}
+          ref={(c) => (this.childRef = c)}
+        />
       </Fragment>
     );
   }
