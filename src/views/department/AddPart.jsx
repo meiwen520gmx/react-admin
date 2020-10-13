@@ -10,6 +10,10 @@ class AddPart extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      formConfig: {
+        Layout: "horizontal",
+        btnText: "确认",
+      },
       formLayout: {
         labelCol: { span: 2 },
         wrapperCol: { span: 22 },
@@ -74,7 +78,15 @@ class AddPart extends Component {
   }
   UNSAFE_componentWillMount() {
     if (this.props.location.state) {
-      this.setState({ id: this.props.location.state.id }); //保存传过来的id
+      this.setState({
+        id: this.props.location.state.id,
+        formConfig: { ...this.state.formConfig, btnText: "编辑" },
+      }); //保存传过来的id
+      console.log(this.state.formConfig)
+    } else {
+      this.setState({
+        formConfig: { ...this.state.formConfig, btnText: "确认" },
+      });
     }
   }
   componentDidMount() {
@@ -129,6 +141,7 @@ class AddPart extends Component {
         ref={(form) => (this.formEle = form)}
         formItem={this.state.formItem}
         formLayout={this.state.formLayout}
+        formConfig={this.state.formConfig}
         onSubmit={this.onSubmit}
       />
     );

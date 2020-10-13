@@ -156,13 +156,14 @@ class FormCom extends Component {
 
 
   render() {
-    const { formLayout } = this.props;
+    const { formLayout,formConfig } = this.props;
     const { loading } = this.state;
     return (
       <Form
         ref={(form) => (this.form = form)}
         onFinish={this.onSubmit}
         {...formLayout}
+        layout={formConfig.Layout}
         initialValues={{
           number: 1,
           status: false,
@@ -171,7 +172,7 @@ class FormCom extends Component {
         {this.initFormItem()}
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
-            确定
+            {formConfig.btnText}
           </Button>
         </Form.Item>
       </Form>

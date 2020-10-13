@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 
 import { Table, Button, Form, Input } from "antd";
+import FormCom from "@/components/form/Index";
 
 import { GetTableList } from "@/api/common";
 
@@ -15,7 +16,20 @@ class TableComponent extends Component {
       current: 1, //当前页码
       total: 1,
       loadingTable: false, //数据加载动画
-      keyWord: "",//搜索关键字
+      keyWord: "", //搜索关键字
+      formConfig: {
+        Layout: "inline",
+        btnText: "搜索",
+      },//form表单配置项
+      formItem: [
+        {
+          type: "Input",
+          label: "部门名称",
+          name: "name",
+          placeholder: "请输入部门名称",
+          style: { width: "200px" }
+        }
+      ],
     };
   }
   componentDidMount() {
@@ -49,7 +63,9 @@ class TableComponent extends Component {
         pageNumber: current,
       },
     };
-    if(this.state.keyWord){requestData.data.name = this.state.keyWord}
+    if (this.state.keyWord) {
+      requestData.data.name = this.state.keyWord;
+    }
     GetTableList(requestData).then((res) => {
       const resData = res.data;
       if (resData.data) {
@@ -66,7 +82,7 @@ class TableComponent extends Component {
     this.props.handleDel();
   };
 
-   //搜索
+  //搜索
   onSearch = (value) => {
     if (this.state.loadingTable) {
       return false;
@@ -90,16 +106,11 @@ class TableComponent extends Component {
     };
     return (
       <Fragment>
-        <Form layout="inline" onFinish={this.onSearch}>
-          <Form.Item name="name" label="部门名称">
-            <Input placeholder="请输入部门名称" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              搜索
-            </Button>
-          </Form.Item>
-        </Form>
+        <FormCom
+          formItem={this.state.formItem}
+          formConfig={this.state.formConfig}
+          onSubmit={this.onSearch}
+        />
         <div className="table-wrap">
           <Table
             rowKey={rowKey || "id"}
