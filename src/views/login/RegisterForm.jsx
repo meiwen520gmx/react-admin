@@ -4,7 +4,7 @@ import CryptoJs from 'crypto-js';
 import { Form, Input, Button, Row, Col, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-import Code from "@/components/code/Index";
+import Code from "@/components/code";
 
 import { validate_email } from "@/utils/validate";
 

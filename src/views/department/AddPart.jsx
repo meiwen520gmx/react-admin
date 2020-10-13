@@ -4,7 +4,7 @@ import { message } from "antd";
 
 import { AddDepartment, CheckDetail, EditDepartment } from "@/api/department";
 
-import FormCom from "@/components/form/Index";
+import FormCom from "@/components/form";
 
 class AddPart extends Component {
   constructor(props) {

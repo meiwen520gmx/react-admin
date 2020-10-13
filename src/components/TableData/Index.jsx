@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 
 import { Table, Button, Form, Input } from "antd";
-import FormCom from "@/components/form/Index";
+import FormCom from "@/components/form";
 
 import { GetTableList } from "@/api/common";
 

@@ -8,7 +8,7 @@ import configRouters from "./components";
 // import PartList from "../../views/department/Index";
 // import AddPart from "../../views/department/AddPart";
 
-import PrivateRouter from "../privateRouter/Index";
+import PrivateRouter from "../privateRouter";
 
 
 class Container extends Component {

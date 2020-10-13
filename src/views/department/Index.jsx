@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 
 import { Button, Switch, message, Modal } from "antd";
-import TableComponent from "@/components/TableData/Index";
+import TableComponent from "@/components/TableData";
 
 import requestUrl from "@/api/requestUrl";
 import { DelDepartment, SwitchStatus } from "@/api/department";
