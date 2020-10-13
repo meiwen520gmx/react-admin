@@ -14,7 +14,6 @@ class PartList extends Component {
       switchId: "",
       //要删除的id
       id: "",
-      
       //警告弹窗
       visible: false,
       //复选框选中数据

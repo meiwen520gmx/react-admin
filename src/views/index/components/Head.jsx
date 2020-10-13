@@ -19,7 +19,6 @@ class Head extends Component {
             collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
           )}
         </Button>
-        头部
       </Fragment>
     );
   }
