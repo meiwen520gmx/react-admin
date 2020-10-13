@@ -17,26 +17,11 @@ class TableComponent extends Component {
       total: 1,
       loadingTable: false, //数据加载动画
       keyWord: "", //搜索关键字
-      formConfig: {
-        Layout: "inline",
-        btnText: "搜索",
-      },//form表单配置项
-      formItem: [
-        {
-          type: "Input",
-          label: "部门名称",
-          name: "name",
-          placeholder: "请输入部门名称",
-          style: { width: "200px" }
-        }
-      ],
     };
   }
   componentDidMount() {
-    console.log(this.props);
     this.getList();
   }
-
   //改变页码
   handleTableChange = (pagination, filters, sorter) => {
     const { current } = pagination;
@@ -49,7 +34,6 @@ class TableComponent extends Component {
       }
     );
   };
-
   //获取列表
   getList = () => {
     const { config } = this.props; //接收传过来的table配置数据
@@ -96,7 +80,7 @@ class TableComponent extends Component {
   };
   render() {
     const { pageSize, current, total, data, loadingTable } = this.state;
-    const { columns, rowKey, isShowPatchBtn } = this.props.config;
+    const { columns, rowKey, isShowPatchBtn,formItem,formConfig } = this.props.config;
     const { rowSelection } = this.props;
     const hasSelected = rowSelection.selectedRowKeys.length > 0;
     const pagination = {
@@ -107,8 +91,8 @@ class TableComponent extends Component {
     return (
       <Fragment>
         <FormCom
-          formItem={this.state.formItem}
-          formConfig={this.state.formConfig}
+          formItem={formItem}
+          formConfig={formConfig}
           onSubmit={this.onSearch}
         />
         <div className="table-wrap">

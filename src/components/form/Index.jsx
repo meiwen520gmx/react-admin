@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Select, InputNumber, Radio } from "antd";
+
+import PropTypes from "prop-types";
 const { Option } = Select;
 class FormCom extends Component {
   constructor(props) {
@@ -163,7 +165,7 @@ class FormCom extends Component {
         ref={(form) => (this.form = form)}
         onFinish={this.onSubmit}
         {...formLayout}
-        layout={formConfig.Layout}
+        layout={formConfig && formConfig.Layout}
         initialValues={{
           number: 1,
           status: false,
@@ -172,12 +174,17 @@ class FormCom extends Component {
         {this.initFormItem()}
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
-            {formConfig.btnText}
+            {formConfig.btnText || "确认"}
           </Button>
         </Form.Item>
       </Form>
     );
   }
 }
+FormCom.propTypes = {
+  formItem: PropTypes.array.isRequired,
+  formLayout: PropTypes.object,
+  formConfig: PropTypes.object,
 
+};
 export default FormCom;

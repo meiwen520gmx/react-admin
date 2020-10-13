@@ -74,6 +74,19 @@ class PartList extends Component {
             ),
           },
         ],
+        formItem: [
+          {
+            type: "Input",
+            label: "部门名称",
+            name: "name",
+            placeholder: "请输入部门名称",
+            style: { width: "200px" },
+          },
+        ],
+        formConfig: {
+          Layout: "inline",
+          btnText: "搜索",
+        }, //form表单配置项
       },
     };
   }
@@ -134,8 +147,6 @@ class PartList extends Component {
       this.childRef.getList(); //重新加载一遍数据
     });
   };
-
- 
 
   hideModal = () => {
     this.setState({
