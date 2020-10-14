@@ -185,6 +185,5 @@ FormCom.propTypes = {
   formItem: PropTypes.array.isRequired,
   formLayout: PropTypes.object,
   formConfig: PropTypes.object,
-
 };
 export default FormCom;

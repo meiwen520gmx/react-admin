@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 class AddUser extends Component {
   constructor(props) {
@@ -7,7 +7,11 @@ class AddUser extends Component {
   }
 
   render() {
-    return (<div>添加用户</div>);
+    return (
+      <div>
+        添加用户
+      </div>
+    );
   }
 }
 
