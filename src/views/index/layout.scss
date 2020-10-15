@@ -3,18 +3,19 @@
 }
 .layout-header{
   // position: relative;
-  position: fixed;
   z-index: 2;
   height: 75px;
-  width: 100%;
   background-color: #fff;
   @include webkit(box-shadow,0 3px 16px 0 rgba(0,0,0,.1));
+  @include flexBox();
+  @include flexAlign(center);
+  @include flexJust(space-between);
+
 }
 .layout-main{
   border: 30px solid #f7f7f7;
   background-color: #fff;
   padding: 30px;
-  margin-top: 75px;
 }
 .collapsed-btn{
   margin-left: -30px;

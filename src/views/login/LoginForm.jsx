@@ -22,9 +22,6 @@ class LoginForm extends Component {
       loading: false,
     };
   }
-  componentDidMount(){
-    console.log(this.props)
-  }
   //点击登录按钮
   onFinish = (values) => {
    

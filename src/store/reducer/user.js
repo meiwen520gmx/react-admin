@@ -10,7 +10,7 @@ const userReducer = function (state = config, action) {
       const {username,token} = action.payload;
       state.username = username;
       state.token = token;
-      return state;
+      return {...state};
     case "CLEAR_USERINFO":
       return {username: "",token: "",};
     default:

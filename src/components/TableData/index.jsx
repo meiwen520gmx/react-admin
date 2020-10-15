@@ -12,7 +12,7 @@ class TableComponent extends Component {
     super(props);
     this.state = {
       data: [], //table列表数据
-      pageSize: 5,
+      pageSize: 10,
       current: 1, //当前页码
       total: 1,
       loadingTable: false, //数据加载动画
