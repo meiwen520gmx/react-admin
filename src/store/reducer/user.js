@@ -1,6 +1,7 @@
+import { getToken, getUserName } from "@/utils/cookies";
 const config = {
-  username: "",
-  token: "",
+  username: "" || getUserName(),//防止刷新的时候数据被清空
+  token: "" || getToken(),
 };
 //Reducer
 

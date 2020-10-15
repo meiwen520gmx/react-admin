@@ -24,7 +24,6 @@ class LoginForm extends Component {
   }
   //点击登录按钮
   onFinish = (values) => {
-   
     values.password = CryptoJs.MD5(values.password).toString(); //加密
     this.setState({ loading: true });
     // setTimeout(() => {主要是为了查看加载的效果
@@ -177,9 +176,9 @@ class LoginForm extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return state.userReducer;
-};
+// const mapStateToProps = (state) => {
+//   return state.userReducer;
+// };
 const mapDispatchToProps = (dispatch) => {
   return {
     onClick: (argument) => {
@@ -188,6 +187,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(withRouter(LoginForm));
