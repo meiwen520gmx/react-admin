@@ -104,6 +104,7 @@ class TableComponent extends Component {
             loading={loadingTable}
             pagination={pagination}
             onChange={this.handleTableChange}
+            scroll={{ y: 520 }}
             bordered
           />
           {!!rowSelection && isShowPatchBtn ? (
