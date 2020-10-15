@@ -7,9 +7,11 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Code from "@/components/code";
 
 import { validate_email } from "@/utils/validate";
-import {setToken, setUserName} from "@/utils/cookies";
+import { setToken, setUserName } from "@/utils/cookies";
 
 import { Login } from "@/api/account";
+
+import { connect } from "react-redux";
 
 class LoginForm extends Component {
   constructor(props) {
@@ -20,8 +22,12 @@ class LoginForm extends Component {
       loading: false,
     };
   }
+  componentDidMount(){
+    console.log(this.props)
+  }
   //点击登录按钮
   onFinish = (values) => {
+   
     values.password = CryptoJs.MD5(values.password).toString(); //加密
     this.setState({ loading: true });
     // setTimeout(() => {主要是为了查看加载的效果
@@ -29,8 +35,9 @@ class LoginForm extends Component {
       .then((res) => {
         message.success(res.message);
         this.setState({ loading: false });
-        setToken(res.data.token);//保存token
-        setUserName(res.data.username);//保存username
+        setToken(res.data.token); //保存token
+        setUserName(res.data.username); //保存username
+        this.props.onClick(res.data);//保存用户信息到redux中
         this.props.history.push("/index");
       })
       .catch((error) => {
@@ -173,4 +180,17 @@ class LoginForm extends Component {
   }
 }
 
-export default withRouter(LoginForm);
+const mapStateToProps = (state) => {
+  return state.userReducer;
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onClick: (argument) => {
+      dispatch({type: "SAVE_USERINFO",payload: argument})
+    },
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(LoginForm));

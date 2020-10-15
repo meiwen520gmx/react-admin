@@ -209,14 +209,15 @@ alias: {
 
 - （1）安装：`npm i --save redux`
 - （2）使用：src/新建 store 文件夹/新建 index.js：
-```
-import { createStore } from "redux";
 
-//Reducer
+```
+import { createStore,combineReducers } from "redux";
+
+//Reducer,reducer可以根据模块来切分，然后使用combineReducers合并为一个reducer对象
 const counter = function(state=0,action){
   switch(action.type){
     case "INCREMENT":
-      return state+1;
+      return state+1;//Reducer 函数里面不能改变 State，必须返回一个全新的对象
     case "DECREMENT":
       return state -1;
     default:
@@ -224,8 +225,66 @@ const counter = function(state=0,action){
   }
 }
 
-const store = createStore(counter);//所有的东西都拿给store进行统一管理
+const store = createStore(counter);//所有的东西都拿给store进行统一管理，以后每当store.dispatch发送过来一个新的 Action，就会自动调用 Reducer，得到新的 State
 
 export default store;
 ```
-* （3）在src/index.js下引入：`import store from "./store";`
+
+- （3）在 src/index.js 下引入：`import store from "./store";`
+
+### react-redux
+
+- 安装：`npm i --save react-redux`
+- 一个 react 插件库，专门用来简化 react 应用中使用 redux,react-redux 将所有组件分成两大类：UI 组件和容器组件
+  - UI 组件
+    （1）只负责 UI 的呈现，不带有任何业务逻辑
+    （2）通过 props 接收数据（一般数据和函数）
+    （3）不使用任何 redux 的 API
+    （4）一般保存在 components 文件夹下
+    （5）没有状态（即不使用 this.state 这个变量）
+  - 容器组件
+    （1）负责管理数据和业务逻辑，不负责 UI 的呈现
+    （2）使用 Redux 的 API
+    （3）一般保存在 containers 文件夹下
+    （4）容器组件仅仅做数据提取，然后渲染对应的子组件
+    （5）带有内部状态
+- `Provider`：让所有组件都可以得到 state 数据，是顶层组件的作用，将 store 作为上下文提供给全局共享
+
+```
+
+  <Provider store={store}>
+    <App />
+  </Provider>
+```
+
+- `connect`:连接组件和 redux,用于包装 UI 组件生成容器组件
+  ```
+  import {connect} from "react-redux"
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Counter)
+  ```
+- `mapStateToProps()`
+  尽量取最小范围的值，不要取不需要的属性，对性能有一定的消耗
+  将外部的数据（即 state 对象）转换为 UI 组件的标签属性
+
+```
+const mapStateToProps = function(state){
+  return {
+    value:state
+  }
+}
+```
+
+- `mapDispatchToProps`:
+  将分发 action 的函数转换为 UI 组件的标签属性
+  简洁的语法可以直接指定为 actions 对象或包含多个 action 方法的对象
+  在组件内可以用 this.props 解构
+
+### redux 和 react-redux
+
+- react-redux 不能单独使用 需要配合 redux 一起使用
+- react-redux 主要由 2 部分组成 `Provider` `connect`
+- Provider 中必须有一个属性 store 值为 store 原理是用了 context 跨组件传值
+- connect:高阶组件 第一个函数中有 2 个参数(函数必须返回一个对象) mapStateToProps mapDispatchToProps
