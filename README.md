@@ -260,11 +260,23 @@ export default store;
 - `connect`:连接组件和 redux,用于包装 UI 组件生成容器组件
   ```
   import {connect} from "react-redux"
+
+  const mapStateToProps = (state) => {
+     return {username:state.userReducer.username};//需要什么就取什么，不能多取，对性能不好，一定要返回对象形式
+  };
+  const mapDispatchToProps = (dispatch) => {
+    return {//一定要返回对象形式
+      onClick: (argument) => {
+        dispatch({type: "SAVE_USERINFO",payload: argument})
+      },
+    };
+  };
   connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps,//如果不需要redux中的state映射到本页面，这里可以直接传null
+    mapDispatchToProps//如果不需要redux中的action映射到本页面，这里可以直接传null
   )(Counter)
   ```
+  然后在本页面直接调用：`this.props.username,  this.props.onClick(arguments)`
 - `mapStateToProps()`
   尽量取最小范围的值，不要取不需要的属性，对性能有一定的消耗
   将外部的数据（即 state 对象）转换为 UI 组件的标签属性
@@ -288,3 +300,14 @@ const mapStateToProps = function(state){
 - react-redux 主要由 2 部分组成 `Provider` `connect`
 - Provider 中必须有一个属性 store 值为 store 原理是用了 context 跨组件传值
 - connect:高阶组件 第一个函数中有 2 个参数(函数必须返回一个对象) mapStateToProps mapDispatchToProps
+
+### 使用 chrome redux 调试插件
+
+- 项目中安装:`npm install redux-devtools-extension --save-dev`
+- 浏览器下载安装扩展程序：`redux-devtools`
+- 安装成功后，还需要 redux-devtools 在项目中的配置，实际上就是在创建 store 的时候把 redux-devtools 安装即可。
+```
+import { composeWithDevTools } from "redux-devtools-extension";
+const store = createStore(allReducer, composeWithDevTools());
+```
+这样就可以打开控制台调试查看redux
