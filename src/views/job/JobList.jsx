@@ -55,11 +55,6 @@ class JobList extends Component {
             },
           },
           {
-            title: "人员数量",
-            key: "number",
-            dataIndex: "number",
-          },
-          {
             title: "操作",
             key: "action",
             width: 215,
