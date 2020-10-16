@@ -35,8 +35,8 @@ const router = [
     icon: "job",
     key: "/index/job",
     subs: [
-      { key: "/index/job/basic-form", title: "职位列表", icon: "" },
-      { key: "/index/job/step-form", title: "添加职位", icon: "" },
+      { key: "/index/job/joblist", title: "职位列表", icon: "" },
+      { key: "/index/job/addjob", title: "添加职位", icon: "" },
     ],
   },
   {
