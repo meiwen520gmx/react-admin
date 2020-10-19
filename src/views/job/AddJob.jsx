@@ -110,6 +110,7 @@ class AddJob extends Component {
   };
   //点击提交按钮
   onSubmit = (values) => {
+    console.log(values)
     this.formEle.switchLoading(true); //切换子组件提交按钮的loading
     if (this.state.id) {
       this.onEdit(values);

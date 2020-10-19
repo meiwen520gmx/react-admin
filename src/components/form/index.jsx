@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Select, InputNumber, Radio } from "antd";
+import SelectComp from "@/components/select";
 
 import PropTypes from "prop-types";
 const { Option } = Select;
+let optionKey = "";//保存SelectComp字段名
 class FormCom extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +41,9 @@ class FormCom extends Component {
       }
       if (item.type === "Select") {
         formList.push(this.selectElem(item));
+      }
+      if (item.type === "SelectComponent") {
+        formList.push(this.SelectComponent(item));
       }
       if (item.type === "InputNumber") {
         formList.push(this.inputNumberElem(item));
@@ -145,10 +150,27 @@ class FormCom extends Component {
       </Form.Item>
     );
   };
+  //创建select
+  SelectComponent = (item) => {
+    const rules = this.rules(item);
+    optionKey = item.name;//保存字段名
+    return (
+      <Form.Item
+        label={item.label}
+        name={item.name}
+        key={item.name}
+        rules={rules}
+      >
+        <SelectComp url={item.url} propKeys={item.props}/>
+      </Form.Item>
+    );
+  };
 
   //点击提交按钮
   onSubmit = (values) => {
+    values[optionKey] = values[optionKey].value;
     this.props.onSubmit(values);
+    optionKey = "";
   };
 
   //切换确认按钮的loading状态
@@ -166,10 +188,7 @@ class FormCom extends Component {
         onFinish={this.onSubmit}
         {...formLayout}
         layout={formConfig && formConfig.Layout}
-        initialValues={{
-          number: 1,
-          status: false,
-        }}
+        initialValues={formConfig && formConfig.initialValues}
       >
         {this.initFormItem()}
         <Form.Item>
